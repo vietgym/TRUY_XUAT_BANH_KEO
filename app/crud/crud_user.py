@@ -31,3 +31,19 @@ def update_user(db: Session, user_id: str, user_update: schemas.UserBase):
 def get_user(db: Session, user_id: str):
     user_respond = db.query(User).filter(User.userID == user_id).first()
     return user_respond
+
+
+def get_all_user(db: Session, skip: int, limit: int):
+    all_user_db = (db.query(User)
+                   .offset(skip)
+                   .limit(limit)
+                   .all())
+    return all_user_db
+
+
+def delete_user(db: Session, user_id: str):
+    db_user = db.query(User).filter(User.userID == user_id).first()
+    if db_user:
+        db.delete(db_user)
+        db.commit()
+    return db_user

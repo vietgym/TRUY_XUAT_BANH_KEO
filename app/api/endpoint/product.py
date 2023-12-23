@@ -11,7 +11,7 @@ from app.services.service_product import ProductService
 router = APIRouter()
 
 
-@router.post("/creat_product/", response_model=Product)
+@router.post("/creat_product/")
 async def creat_user(product: ProductBase,
                      db: Session = Depends(get_db)):
     pro_service = ProductService(db=db)
@@ -19,7 +19,7 @@ async def creat_user(product: ProductBase,
     return pro_response
 
 
-@router.post("/update_product_by_id/{pro_id}/", response_model=Product)
+@router.put("/update_product_by_id/{pro_id}/")
 async def update_product_by_id(pro_id: str,
                                pro_update: ProductBase,
                                db: Session = Depends(get_db)):
@@ -28,9 +28,26 @@ async def update_product_by_id(pro_id: str,
     return pro_response
 
 
-@router.post("/get_product_by_id/{pro_id}/", response_model=Product)
+@router.get("/get_product_by_id/{pro_id}/")
 async def get_product_by_id(pro_id: str,
                             db: Session = Depends(get_db)):
     pro_service = ProductService(db=db)
     pro_response = await pro_service.get_product(pro_id=pro_id)
+    return pro_response
+
+
+@router.get("/get_all_products/{skip}/{limit}/")
+async def get_all_products(skip: int,
+                           limit: int,
+                           db: Session = Depends(get_db)):
+    pro_service = ProductService(db=db)
+    pro_response = await pro_service.get_all_product(skip=skip, limit=limit)
+    return pro_response
+
+
+@router.delete("/delete_product/{pro_id}/")
+async def delete_product_by_id(pro_id: str,
+                               db: Session = Depends(get_db)):
+    pro_service = ProductService(db=db)
+    pro_response = await pro_service.delete_product_by_id(pro_id=pro_id)
     return pro_response

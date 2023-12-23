@@ -36,3 +36,17 @@ def get_product(db: Session, pro_id: str):
     return product_respond
 
 
+def get_all_product(db: Session, skip: int, limit: int):
+    all_product_db = (db.query(Product)
+                      .offset(skip)
+                      .limit(limit)
+                      .all())
+    return all_product_db
+
+
+def delete_product(db: Session, pro_id: str):
+    db_product = db.query(Product).filter(Product.proID == pro_id).first()
+    if db_product:
+        db.delete(db_product)
+        db.commit()
+    return db_product

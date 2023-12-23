@@ -28,3 +28,17 @@ class ProductService:
         if not product_response:
             return {"mess": "LỖI KHÔNG LẤY ĐƯỢC PRODUCT"}
         return product_response
+
+    async def get_all_product(self, skip: int, limit: int):
+        product_response = crud_product.get_all_product(db=self.db,
+                                                        skip=skip,
+                                                        limit=limit)
+        if not product_response:
+            return {"mess": "LỖI KHÔNG LẤY ĐƯỢC ALL PRODUCT"}
+        return product_response
+
+    async def delete_product_by_id(self, pro_id: str):
+        product_response = crud_product.delete_product(db=self.db, pro_id=pro_id)
+        if not product_response:
+            return {"mess": "LỖI KHÔNG XOÁ ĐƯỢC PRODUCT"}
+        return product_response
