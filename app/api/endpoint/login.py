@@ -15,6 +15,11 @@ def load_rood(request: Request):
     return templates.TemplateResponse("login.html", {"request": request})
 
 
+@router.get("/login/", response_class=HTMLResponse)
+def login(request: Request):
+    return templates.TemplateResponse("login.html", {"request": request})
+
+
 @router.get("/home/")
 def login(request: Request):
     return templates.TemplateResponse("addPic.html", {"request": request})
@@ -33,3 +38,21 @@ async def get_info_user(username: str = Form(...),
 @router.get("/load_register/")
 def load_register(request: Request):
     return templates.TemplateResponse("register.html", {"request": request})
+
+
+@router.post("/register_user/")
+async def register_user(request: Request, db: Session = Depends(get_db)):
+    form = await request.form()
+    userLg = form.get("username")
+    userPass = form.get("password")
+    re_password = form.get("re_password")
+    userName = form.get("name")
+    userEmail = form.get("email")
+    print(f"Received username: {userLg}, password: {userPass}, name: {userName}, email: {userEmail}")
+    user_service = LoginService(db=db)
+    user_new = await user_service.ck_register_user(userLg=userLg, userPass=userPass, re_password=re_password,
+                                                   userName=userName, userEmail=userEmail)
+    if user_new == {"message": "mat khau nhap lai khong giong"}:
+        return user_new
+    crt_user = await user_service.creat_user(user=user_new)
+    return crt_user

@@ -1,8 +1,8 @@
 import logging
 from sqlalchemy.orm import Session
 
-from app.schemas.schemas import User
-from app.crud import crud_login
+from app.schemas.schemas import User, UserBase
+from app.crud import crud_login, crud_user
 
 logger = logging.getLogger(__name__)
 
@@ -16,3 +16,22 @@ class LoginService:
         if not user:
             return "SAITKMK"
         return user
+
+    async def ck_register_user(self, userName: str, userEmail: str,
+                               userLg: str, userPass: str,
+                               re_password: str):
+        if userPass != re_password:
+            return {"message": "mat khau nhap lai khong giong"}
+        user = UserBase
+        user.userName = userName
+        user.userEmail = userEmail
+        user.userLg = userLg
+        user.userPass = userPass
+        user.role = "user"
+        return user
+
+    async def creat_user(self, user: UserBase):
+        crt_user = crud_user.create_user(db=self.db, user=user)
+        if not crt_user:
+            return "LOi"
+        return crt_user
