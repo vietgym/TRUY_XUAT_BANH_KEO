@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/css/login.css">
+    <title>Login to Candy Trace</title>
+    <style>
+        .success-message {
+            display: none;
+            background-color: #ff7c1f;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <img src="../static/img/Candy-PNG-Image.png" alt="Candy Trace Logo" class="logo">
+        <form id="loginForm" class="login-form">
+            <h2>Login to Candy Trace</h2>
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+
+            <button type="button" onclick="handleLogin()">Login</button>
+
+            <div class="success-message" id="successMessage">
+                Tài khoản hoặc mật khẩu không chính xác!
+            </div>
+        </form>
+
+        <div class="register-link">
+            <p>Don't have an account? <a href="#" onclick="redirectToRegister()">Register here</a></p>
+            <script>
+                function redirectToRegister() {
+                    window.location.href = "/load_register/";
+                }
+                async function handleLogin() {
+                    const form = document.getElementById("loginForm");
+                    const formData = new FormData(form);
+
+                    try {
+                        const response = await fetch("/login_user/", {
+                            method: "POST",
+                            body: formData
+                        });
+                        const result = await response.json();
+                        if (result === "SAITKMK") {
+                            document.getElementById("successMessage").style.display = "block";
+                        } else {
+                            window.location.href = "/home/";
+                        }
+                    } catch (error) {
+                        console.error("Error during login:", error);
+                    }
+                }
+            </script>
+        </div>
+    </div>
+</body>
+</html>
