@@ -21,6 +21,7 @@ class Product(ProductBase):
 
 
 class UserBase(BaseModel):
+    userName: str
     userEmail: str
     userLg: str
     userPass: str

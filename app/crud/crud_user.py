@@ -8,6 +8,7 @@ from app.schemas import schemas
 def create_user(db: Session, user: schemas.UserBase):
     ID = str(uuid.uuid4())
     db_user = User(userID=ID,
+                   userName=user.userName,
                    userEmail=user.userEmail,
                    userLg=user.userLg,
                    userPass=user.userPass,
