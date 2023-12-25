@@ -32,8 +32,16 @@ async def update_user_by_id(user_id: str,
 async def get_user_by_id(user_id: str,
                          db: Session = Depends(get_db)):
     pro_service = UserService(db=db)
-    pro_response = await pro_service.get_product(user_id=user_id)
+    pro_response = await pro_service.get_user(user_id=user_id)
     return pro_response
+
+
+# @router.get("/get_full_trans_user/{user_id}/")
+# async def get_user_by_id(user_id: str,
+#                          db: Session = Depends(get_db)):
+#     pro_service = UserService(db=db)
+#     pro_response = await pro_service.get_full_trans_user(user_id=user_id)
+#     return pro_response
 
 
 @router.get("/get_all_users/{skip}/{limit}/")

@@ -23,10 +23,16 @@ class UserService:
             return {"mess": "LỖI KHÔNG UPDATE ĐƯỢC USER"}
         return upd_user
 
-    async def get_product(self, user_id: str):
+    async def get_user(self, user_id: str):
         user_response = crud_user.get_user(db=self.db, user_id=user_id)
         if not user_response:
-            return {"mess": "LỖI KHÔNG LẤY ĐƯỢC PRODUCT"}
+            return {"mess": "LỖI KHÔNG LẤY ĐƯỢC USER"}
+        return user_response
+
+    async def get_full_trans_user(self, user_id: str):
+        user_response = crud_user.get_full_trans_user(db=self.db, user_id=user_id)
+        if not user_response:
+            return {"mess": "LỖI KHÔNG LẤY ĐƯỢC THÔNG TIN TRANS CỦA USER"}
         return user_response
 
     async def get_all_user(self, skip: int, limit: int):

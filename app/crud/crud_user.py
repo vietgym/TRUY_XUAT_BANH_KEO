@@ -1,6 +1,7 @@
 import uuid
+import json
 from sqlalchemy.orm import Session
-from app.model.all import User
+from app.model.all import User, Trans, Product
 from app.schemas import schemas
 
 
@@ -33,6 +34,20 @@ def get_user(db: Session, user_id: str):
     return user_respond
 
 
+def get_full_trans_user(db: Session, user_id: str):
+    user = db.query(User).filter(User.userID == user_id).first()
+    trans = db.query(Trans).filter(Trans.userID == user_id).all()
+    data = {"user": user, "trans": trans}
+    return data
+
+
+def get_full_product_user(db: Session, user_id: str):
+    user = db.query(User).filter(User.userID == user_id).first()
+    trans = db.query(Trans).filter(Trans.userID == user_id).all()
+    data = {"user": user, "trans": trans}
+    return data
+
+
 def get_all_user(db: Session, skip: int, limit: int):
     all_user_db = (db.query(User)
                    .offset(skip)
@@ -47,3 +62,19 @@ def delete_user(db: Session, user_id: str):
         db.delete(db_user)
         db.commit()
     return db_user
+
+
+# class UserAndTransResponse:
+#     def __init__(self, user, trans):
+#         self.user = user
+#         self.trans = trans
+#
+#
+# def get_full_trans_user(db: Session, user_id: str):
+#     # user = db.query(User).filter(User.userID == user_id).first()
+#     # trans = db.query(Trans).filter(Trans.userID == user_id).all()
+#     data = (db.query(User, Trans)
+#             .outerjoin(Trans, User.userID == Trans.userID)
+#             .filter(User.userID == user_id).all())
+#     response = [UserAndTransResponse(user=user, trans=trans) for user, trans in data]
+#     return response
