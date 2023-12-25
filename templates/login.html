@@ -45,12 +45,12 @@
                     const formData = new FormData(form);
 
                     try {
-                        const response = await fetch("/login_check/", {
+                        const response = await fetch("/login_user/", {
                             method: "POST",
                             body: formData
                         });
                         const result = await response.json();
-                        if (result === "LOI") {
+                        if (result === "SAITKMK") {
                             document.getElementById("successMessage").style.display = "block";
                         } else {
                             window.location.href = "/home/";
