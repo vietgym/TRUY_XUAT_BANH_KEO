@@ -2,14 +2,39 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../static/css/login.css">
-    <title>Home - Candy Trace</title>
+    <link rel="stylesheet" href="../static/css/home.css">
+    <title>Trang Chủ</title>
 </head>
 <body>
-    <div class="home-container">
-        <h1>Yayyyyyy</h1>
-        <h1>Login Successful!!</h1>
+
+<header>
+    <div class="logo">
+        <img src="../static/img/logo.png" alt="Logo">
     </div>
+    <nav>
+        <div class="menu">
+            <a href="">Quản lý sản phẩm bánh kẹo</a>
+            <a href="#">Thông tin tài khoản</a>
+        </div>
+    </nav>
+    <div class="user-actions">
+        <button onclick="logout()">Đăng xuất</button>
+    </div>
+</header>
+
+<div class="avatar-container">
+    <img src="../static/img/avatar.png" alt="Avatar">
+</div>
+
+<!-- Nội dung trang chủ ở đây -->
+
+<script>
+    function logout() {
+        window.location.href = "/";
+    }
+</script>
+
 </body>
 </html>
