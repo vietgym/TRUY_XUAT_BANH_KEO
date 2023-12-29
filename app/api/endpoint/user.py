@@ -47,6 +47,16 @@ async def get_user_by_id(user_id: str,
     return user_response
 
 
+@router.get("/get_role_user/")
+async def get_role_user(request: Request,
+                        session: Session = Depends(get_session),
+                        db: Session = Depends(get_db)):
+    user_id = session.get("current_user_id")
+    user_service = UserService(db=db)
+    user_response = await user_service.get_role_user(user_id=user_id)
+    return user_response
+
+
 # @router.get("/get_full_trans_user/{user_id}/")
 # async def get_user_by_id(user_id: str,
 #                          db: Session = Depends(get_db)):

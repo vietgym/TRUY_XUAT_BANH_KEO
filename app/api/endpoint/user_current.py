@@ -13,9 +13,13 @@ router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 
 
-@router.get("/load_user_profile/")
-def load_register(request: Request):
-    return templates.TemplateResponse("home_user/infoUser.html", {"request": request})
+@router.get("/user_profile/")
+async def get_info_current_user(session: Session = Depends(get_session),
+                                db: Session = Depends(get_db)):
+    user_id = session.get("current_user_id")
+    user_service = UserService(db=db)
+    user_response = await user_service.get_user(user_id=user_id)
+    return user_response
 
 
 @router.get("/user_profile/")
@@ -52,5 +56,3 @@ async def update_info_user(request: Request,
     user_service = UserService(db=db)
     user_response = await user_service.update_info_user(user_id=user_id, user_name=name, user_email=email)
     return user_response
-
-

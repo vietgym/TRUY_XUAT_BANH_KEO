@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../static/css/home.css">
+    <title>Trang Chủ</title>
+</head>
+<body>
+
+<header>
+    <div class="logo">
+        <img src="../../static/img/logo.png" alt="Logo">
+    </div>
+    <nav>
+        <div class="menu">
+            <a href="" onclick="manageProducts(); return false;">Mua bánh kẹo</a>
+            <a href="" onclick="accountInfo(); return false;">Thông tin tài khoản</a>
+        </div>
+    </nav>
+    <div class="user-actions">
+        <button onclick="logout()">Đăng xuất</button>
+    </div>
+</header>
+
+<div class="avatar-container">
+    <img src="../../static/img/avatar.png" alt="Avatar">
+</div>
+
+<!-- Nội dung trang chủ ở đây -->
+
+<script>
+    function logout() {
+        window.location.href = "/";
+    }
+    function manageProducts() {
+        window.location.href = "/load_register/";
+    }
+    function accountInfo() {
+        window.location.href = "/load_user_profile/";
+    }
+</script>
+
+</body>
+</html>

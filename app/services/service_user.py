@@ -35,6 +35,12 @@ class UserService:
             return {"mess": "LỖI KHÔNG LẤY ĐƯỢC USER"}
         return user_response
 
+    async def get_role_user(self, user_id: str):
+        user_response = crud_user.get_role_user(db=self.db, user_id=user_id)
+        if not user_response:
+            return {"mess": "LỖI KHÔNG LẤY ĐƯỢC ROLE USER"}
+        return user_response
+
     async def get_full_trans_user(self, user_id: str):
         user_response = crud_user.get_full_trans_user(db=self.db, user_id=user_id)
         if not user_response:

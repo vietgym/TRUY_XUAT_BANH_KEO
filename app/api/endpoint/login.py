@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from app.db.database import get_db
 from app.api.current.current import set_current_user, get_session
 from app.services.service_login import LoginService
-# from app.services.se
+from app.services.service_user import UserService
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates/")
@@ -25,6 +25,11 @@ def login(request: Request):
 @router.get("/home/")
 def login(request: Request):
     return templates.TemplateResponse("home_user/home.html", {"request": request})
+
+
+@router.get("/home_user/")
+def login(request: Request):
+    return templates.TemplateResponse("home_user/home_user.html", {"request": request})
 
 
 @router.get("/example/")
@@ -55,7 +60,7 @@ async def get_current_user(session: Session = Depends(get_session)):
 
 @router.get("/load_register/")
 def load_register(request: Request):
-    return templates.TemplateResponse("register.html", {"request": request})
+    return templates.TemplateResponse("login_and_register/register.html", {"request": request})
 
 
 @router.post("/register_user/")

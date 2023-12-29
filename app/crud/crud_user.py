@@ -46,7 +46,13 @@ def update_info_user(db: Session, user_id: str, user_name: str, user_email: str)
 
 def get_user(db: Session, user_id: str):
     user_respond = db.query(User).filter(User.userID == user_id).first()
-    return user_respond
+    return user_respond.role
+
+
+def get_role_user(db: Session, user_id: str):
+    user_respond = db.query(User).filter(User.userID == user_id).first()
+    role_user = user_respond.role
+    return role_user
 
 
 def get_full_trans_user(db: Session, user_id: str):

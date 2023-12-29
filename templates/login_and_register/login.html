@@ -53,7 +53,15 @@
                         if (result === "SAITKMK") {
                             document.getElementById("successMessage").style.display = "block";
                         } else {
-                            window.location.href = "/home/";
+                            const response1 = await fetch("/get_role_user/", {
+                                method: "GET"
+                            })
+                            const result1 = await response1.json();
+                            if (result1 === "admin"){
+                                window.location.href = "/home/";
+                            } else {
+                                window.location.href = "/home_user/";
+                            }
                         }
                     } catch (error) {
                         console.error("Error during login:", error);
