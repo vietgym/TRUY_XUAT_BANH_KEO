@@ -9,22 +9,22 @@ from app.services.service_login import LoginService
 # from app.services.se
 
 router = APIRouter()
-templates = Jinja2Templates(directory="templates")
+templates = Jinja2Templates(directory="templates/")
 
 
 @router.get("/")
 def load_rood(request: Request):
-    return templates.TemplateResponse("login.html", {"request": request})
+    return templates.TemplateResponse("login_and_register/login.html", {"request": request})
 
 
 @router.get("/login/", response_class=HTMLResponse)
 def login(request: Request):
-    return templates.TemplateResponse("login.html", {"request": request})
+    return templates.TemplateResponse("login_and_register/login.html", {"request": request})
 
 
 @router.get("/home/")
 def login(request: Request):
-    return templates.TemplateResponse("home.html", {"request": request})
+    return templates.TemplateResponse("home_user/home.html", {"request": request})
 
 
 @router.get("/example/")

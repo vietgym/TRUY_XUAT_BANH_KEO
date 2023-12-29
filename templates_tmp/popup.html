@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Popup Example</title>
+  <style>
+    /* Styling for the overlay */
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Styling for the popup content */
+    .popup-content {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    }
+  </style>
+</head>
+<body>
+
+<!-- Button to trigger the popup -->
+<button onclick="openPopup()">Hiển thị thông báo</button>
+
+<!-- Overlay and popup content -->
+<div id="overlay" class="overlay">
+  <div class="popup-content">
+    <!-- Popup content goes here -->
+    <p>Nội dung thông báo hoặc thông tin cần hiển thị.</p>
+    <button onclick="closePopup()">Đóng</button>
+  </div>
+</div>
+
+<script>
+  // Function to open the popup
+  function openPopup() {
+    document.getElementById("overlay").style.display = "flex";
+  }
+
+  // Function to close the popup
+  function closePopup() {
+    document.getElementById("overlay").style.display = "none";
+  }
+</script>
+
+</body>
+</html>
