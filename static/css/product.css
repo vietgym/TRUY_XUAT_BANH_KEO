@@ -19,12 +19,15 @@ header {
 }
 
 .avatar-container {
-  margin-top: 20px; /* Khoảng cách giữa thanh menu và avatar */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px; /* Khoảng cách giữa thanh menu và avatar */
 }
 
 .avatar-container img {
-  max-width: 200px; /* Điều chỉnh kích thước avatar theo mong muốn */
-  border-radius: 50%; /* Làm tròn góc để tạo hiệu ứng hình tròn */
+    max-width: 200px;
+    border-radius: 50%;
 }
 
 nav {
@@ -32,8 +35,8 @@ nav {
 }
 
 .menu {
-    display: flex; /* Hiển thị các liên kết ngang */
-    margin-right: auto; /* Đẩy các phần tử sang bên trái */
+    display: flex;
+    margin-right: 30px;
 }
 
 .menu a {
@@ -51,7 +54,6 @@ nav {
     transform: scale(1.1);
     transition: transform 0.3s ease;
 }
-
 .user-actions button {
     background-color: #fd9644;
     color: #fff;
@@ -63,24 +65,4 @@ nav {
 
 .user-actions button:hover {
     background-color: #ff7c1f;
-}
-
-/* Nội dung trang chủ */
-.main-content {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-/* Tiêu đề "Sản phẩm bánh kẹo" */
-h2 {
-    font-size: 24px;
-    color: #333;
-}
-
-/* Khu vực chứa sản phẩm */
-.product-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
 }

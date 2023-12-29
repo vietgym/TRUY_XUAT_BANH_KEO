@@ -13,13 +13,14 @@ router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 
 
-@router.get("/user_profile/")
-async def get_info_current_user(session: Session = Depends(get_session),
-                                db: Session = Depends(get_db)):
-    user_id = session.get("current_user_id")
-    user_service = UserService(db=db)
-    user_response = await user_service.get_user(user_id=user_id)
-    return user_response
+@router.get("/load_user_profile/")
+async def load_user_profile(request: Request):
+    return templates.TemplateResponse("home_user/infoUser.html", {"request": request})
+
+
+@router.get("/load_product_profile_ad/")
+async def load_product_profile_ad(request: Request):
+    return templates.TemplateResponse("home_user/product_profile_ad.html", {"request": request})
 
 
 @router.get("/user_profile/")
@@ -29,19 +30,6 @@ async def get_info_current_user(session: Session = Depends(get_session),
     user_service = UserService(db=db)
     user_response = await user_service.get_user(user_id=user_id)
     return user_response
-
-
-# @router.post("/update_info_user/")
-# async def update_info_user(data: dict, request: Request,
-#                            session: Session = Depends(get_session),
-#                            db: Session = Depends(get_db)):
-#     user_name = data.get("editUserName")
-#     email = data.get("editUserEmail")
-#     print(f"Nhận được tên người dùng: {user_name}, email: {email}")
-#     user_id = session.get("current_user_id")
-#     user_service = UserService(db=db)
-#     user_response = await user_service.update_info_user(user_id=user_id, user_name=user_name, user_email=email)
-#     return user_response
 
 
 @router.post("/update_info_user/")

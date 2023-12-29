@@ -46,7 +46,7 @@ def update_info_user(db: Session, user_id: str, user_name: str, user_email: str)
 
 def get_user(db: Session, user_id: str):
     user_respond = db.query(User).filter(User.userID == user_id).first()
-    return user_respond.role
+    return user_respond
 
 
 def get_role_user(db: Session, user_id: str):
