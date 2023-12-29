@@ -20,6 +20,23 @@ async def creat_user(product: ProductBase,
     return pro_response
 
 
+@router.post("/creat_info_product/")
+async def creat_info_product(request: Request,
+                             db: Session = Depends(get_db)):
+    form = await request.form()
+    product = ProductBase(proName=form.get("productName"),
+                          manufacturerAdd=form.get("manufacturerAdd"),
+                          manufacturerName=form.get("manufacturerName"),
+                          manufacturerCont=form.get("manufacturerCont"),
+                          distributorAdd=form.get("distributorAdd"),
+                          distributorName=form.get("distributorName"),
+                          distributorCont=form.get("distributorCont"),
+                          otherDetails=form.get("otherDetails"))
+    pro_service = ProductService(db=db)
+    pro_response = await pro_service.creat_product(product=product)
+    return pro_response
+
+
 @router.put("/update_product_by_id/{pro_id}/")
 async def update_product_by_id(pro_id: str,
                                pro_update: ProductBase,
@@ -78,4 +95,15 @@ async def delete_product_by_id(pro_id: str,
                                db: Session = Depends(get_db)):
     pro_service = ProductService(db=db)
     pro_response = await pro_service.delete_product_by_id(pro_id=pro_id)
+    return pro_response
+
+
+@router.delete("/delete_info_product/")
+async def delete_info_product(request: Request,
+                              db: Session = Depends(get_db)):
+    form = await request.form()
+    product_id = form.get("productId")
+    print(product_id)
+    pro_service = ProductService(db=db)
+    pro_response = await pro_service.delete_product_by_id(pro_id=product_id)
     return pro_response

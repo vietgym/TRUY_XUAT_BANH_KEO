@@ -104,7 +104,7 @@
     </div>
     <nav>
         <div class="menu">
-            <a href="#" onclick="manageProducts(); return false;">Quản lý sản phẩm bánh kẹo</a>
+            <a href="#" onclick="manageProducts(); return false;">Thêm sản phẩm bánh kẹo</a>
             <a href="#" onclick="accountInfo(); return false;">Thông tin tài khoản</a>
         </div>
     </nav>
@@ -150,7 +150,7 @@
                 <h3>${product.proName}</h3>
                 <p>${product.otherDetails}</p>
                 <button onclick="editProduct('${product.proID}', '${product.proName}', '${product.manufacturerName}', '${product.manufacturerAdd}', '${product.manufacturerCont}', '${product.distributorName}', '${product.distributorAdd}', '${product.distributorCont}', '${product.otherDetails}')">Sửa</button>
-                <button onclick="deleteProduct('${product.proID}')">Xoá</button>
+                <button onclick="deleteProduct('${product.proID}', '${product.proName}', '${product.manufacturerName}', '${product.manufacturerAdd}', '${product.manufacturerCont}', '${product.distributorName}', '${product.distributorAdd}', '${product.distributorCont}', '${product.otherDetails}')">Xoá</button>
             `;
 
             productContainer.appendChild(productDiv);
@@ -187,7 +187,65 @@
     }
 
     function manageProducts() {
-        window.location.href = "/load_product_profile_ad/";
+        const productInfoHTML = `
+            <form id="editForm">
+                <img src="../../static/img/sp1.png">
+                <h3>Creat new product</h3>
+                <label for="productName">Product Name</label>
+                <input type="text" id="productName" name="productName" value="string" readonly>
+                <label for="manufacturerName">Manufacturer Name:</label>
+                <input type="text" id="manufacturerName" name="manufacturerName" value="string" readonly>
+                <label for="manufacturerAdd">Manufacturer Address:</label>
+                <input type="text" id="manufacturerAdd" name="manufacturerAdd" value="string" readonly>
+                <label for="manufacturerCont">Manufacturer Contact:</label>
+                <input type="text" id="manufacturerCont" name="manufacturerCont" value="string" readonly>
+                <label for="distributorName">Distributor Name:</label>
+                <input type="text" id="distributorName" name="distributorName" value="string" readonly>
+                <label for="distributorAdd">Distributor Address:</label>
+                <input type="text" id="distributorAdd" name="distributorAdd" value="string" readonly>
+                <label for="distributorCont">Distributor Contact:</label>
+                <input type="text" id="distributorCont" name="distributorCont" value="string" readonly>
+                <label for="otherDetails">Other Details:</label>
+                <textarea id="otherDetails" name="otherDetails" readonly>string</textarea>
+                <button type="button" class="xac_nhan" onclick="confirmCreateProduct()">Xác Nhận</button>
+                <button type="button" class="close" onclick="closedProduct()">Đóng</button>
+            </form>
+        `;
+
+        const popupContent = document.getElementById("popup-content");
+        popupContent.innerHTML = productInfoHTML;
+
+        const editForm = document.getElementById("editForm");
+        editForm.productName.removeAttribute("readonly");
+        editForm.manufacturerName.removeAttribute("readonly");
+        editForm.manufacturerAdd.removeAttribute("readonly");
+        editForm.manufacturerCont.removeAttribute("readonly");
+        editForm.distributorName.removeAttribute("readonly");
+        editForm.distributorAdd.removeAttribute("readonly");
+        editForm.distributorCont.removeAttribute("readonly");
+        editForm.otherDetails.removeAttribute("readonly");
+
+        document.getElementById("popup").style.display = "block";
+    }
+
+    async function confirmCreateProduct(){
+        try {
+            const form = document.getElementById("editForm");
+            const formData = new FormData(form);
+            const response = await fetch("/creat_info_product/", {
+                method: "POST",
+                body: formData
+            });
+            if (!response.ok) {
+                console.error("Lỗi cập nhật thông tin người dùng:", response.statusText);
+            }
+        } catch (error) {
+            console.error("Lỗi cập nhật thông tin người dùng:", error);
+        }
+        alert("Cập nhật thông tin thành công!")
+        // document.getElementById('userName').value = document.getElementById('editUserName').value;
+        // document.getElementById('userEmail').value = document.getElementById('editUserEmail').value;
+        location.reload();
     }
 
     function accountInfo() {
@@ -255,15 +313,62 @@
         alert("Cập nhật thông tin thành công!")
         // document.getElementById('userName').value = document.getElementById('editUserName').value;
         // document.getElementById('userEmail').value = document.getElementById('editUserEmail').value;
-        closedProduct();
+        location.reload();
     }
     function closedProduct() {
         document.getElementById('popup').style.display = 'none';
     }
 
-    function deleteProduct(productId) {
-        alert("xoa");
+    async function deleteProduct(productId, productName, manufacturerName, manufacturerAdd, manufacturerCont, distributorName, distributorAdd, distributorCont, otherDetails) {
+        const productInfoHTML = `
+            <form id="editForm">
+                <img src="../../static/img/sp1.png" alt="${productId}">
+                <h3>${productName}</h3>
+                <label for="productId">Product ID</label>
+                <input type="text" id="productId" name="productId" value="${productId}" readonly>
+                <label for="productName">Product Name</label>
+                <input type="text" id="productName" name="productName" value="${productName}" readonly>
+                <label for="manufacturerName">Manufacturer Name:</label>
+                <input type="text" id="manufacturerName" name="manufacturerName" value="${manufacturerName}" readonly>
+                <label for="manufacturerAdd">Manufacturer Address:</label>
+                <input type="text" id="manufacturerAdd" name="manufacturerAdd" value="${manufacturerAdd}" readonly>
+                <label for="manufacturerCont">Manufacturer Contact:</label>
+                <input type="text" id="manufacturerCont" name="manufacturerCont" value="${manufacturerCont}" readonly>
+                <label for="distributorName">Distributor Name:</label>
+                <input type="text" id="distributorName" name="distributorName" value="${distributorName}" readonly>
+                <label for="distributorAdd">Distributor Address:</label>
+                <input type="text" id="distributorAdd" name="distributorAdd" value="${distributorAdd}" readonly>
+                <label for="distributorCont">Distributor Contact:</label>
+                <input type="text" id="distributorCont" name="distributorCont" value="${distributorCont}" readonly>
+                <label for="otherDetails">Other Details:</label>
+                <textarea id="otherDetails" name="otherDetails" readonly>${otherDetails}</textarea>
+                <button type="button" class="xac_nhan" onclick="confirmDeleteProduct()">Xác Nhận</button>
+                <button type="button" class="close" onclick="closedProduct()">Đóng</button>
+            </form>
+        `;
+
+        const popupContent = document.getElementById("popup-content");
+        popupContent.innerHTML = productInfoHTML;
+        document.getElementById("popup").style.display = "block";
     }
+
+    async function confirmDeleteProduct(){
+        try {
+            const form = document.getElementById("editForm");
+            const formData = new FormData(form);
+            const response = await fetch("/delete_info_product/", {
+                method: "DELETE",
+                body: formData
+            });
+            if (!response.ok) {
+                console.error("Lỗi cập nhật thông tin người dùng:", response.statusText);
+            }
+        } catch (error) {
+            console.error("Lỗi cập nhật thông tin người dùng:", error);
+        }
+        location.reload();
+    }
+
 </script>
 </body>
 </html>
