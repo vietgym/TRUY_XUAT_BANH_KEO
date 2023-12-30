@@ -60,10 +60,11 @@ async def get_all_trans(skip: int,
 
 
 @router.get("/get_all_trans_by_user_id/")
-async def get_all_trans_by_user_id(user_id: str,
-                                   db: Session = Depends(get_db)):
+async def read_trans_by_user_id(session: Session = Depends(get_session),
+                                db: Session = Depends(get_db)):
+    user_id = session.get("current_user_id")
     trans_service = TransService(db=db)
-    trans_response = await trans_service.get_all_trans_by_user_id(user_id=user_id)
+    trans_response = await trans_service.get_all_trans_ids_by_user_id(user_id=user_id)
     return trans_response
 
 

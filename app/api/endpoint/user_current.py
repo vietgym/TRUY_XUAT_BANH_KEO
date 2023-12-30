@@ -23,6 +23,11 @@ async def load_product_profile_ad(request: Request):
     return templates.TemplateResponse("home_user/product_profile_ad.html", {"request": request})
 
 
+@router.get("/load_history_trans/")
+async def load_user_profile(request: Request):
+    return templates.TemplateResponse("home_user/history_trans.html", {"request": request})
+
+
 @router.get("/user_profile/")
 async def get_info_current_user(session: Session = Depends(get_session),
                                 db: Session = Depends(get_db)):
