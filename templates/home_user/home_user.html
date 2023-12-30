@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../../static/css/home.css">
     <style>
-        /* Thêm CSS cho ô sản phẩm */
         .product-container {
             display: flex;
             flex-wrap: wrap;
@@ -23,6 +22,9 @@
             background-color: #fff;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .product:hover {
@@ -45,6 +47,7 @@
             color: #555;
             max-height: 80px;
             overflow: hidden;
+            margin-top: 10px; /* Thêm margin để tạo khoảng cách giữa các phần tử */
         }
 
         .product button {
@@ -55,12 +58,13 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            margin-top: 10px;
+            margin-top: auto; /* Sử dụng margin-top: auto để đặt nút ở đáy */
         }
 
         .product button:hover {
             background-color: #45a049;
         }
+
         /* CSS cho cửa sổ popup */
         #popup {
             display: none;
@@ -114,6 +118,7 @@
         }
     </style>
     <title>Trang Chủ</title>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.5.3/dist/web3.min.js"></script>
 </head>
 <body>
 
@@ -125,6 +130,8 @@
         <div class="menu">
             <a href="#" onclick="manageProducts(); return false;">Lịch sử giao dịch</a>
             <a href="#" onclick="accountInfo(); return false;">Thông tin tài khoản</a>
+            <button onclick="connectToMetaMask()">Connect to MetaMask</button>
+            <button onclick="checkEtherBalance()">Check Ether Balance</button>
         </div>
     </nav>
     <div class="user-actions">
@@ -227,23 +234,28 @@
         popupContent.innerHTML = confirmHTML;
         document.getElementById("popup").style.display = "block";
     }
-    async function confirmPurchase(productID){
-        alert("Thông tin GIAO DỊCH đã được lưu")
-        alert(productID)
+    async function confirmPurchase(productID) {
+        alert("Thông tin GIAO DỊCH đã được lưu");
         const data = { product_id: productID };
-            fetch("/creat_trans_FE/", {
+        try {
+            const response = await fetch("/creat_trans_FE/", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify(data),
-            })
-        .then(response => response.json())
-        .then(result => {
+            });
+            if (!response.ok) {
+                throw new Error(`Error: ${response.status} - ${response.statusText}`);
+            }
+            const result = await response.json();
+            const { transID, transTime, userID } = result;
+            await makeHashTrans(userID, productID, transID, transTime);
             console.log("Edit product response:", result);
-        })
-        .catch(error => console.error("Error editing product:", error));
-        document.getElementById("popup").style.display = "none";
+            document.getElementById("popup").style.display = "none";
+        } catch (error) {
+            console.error("Error editing product:", error);
+        }
     }
 
     async function addProduct(productID){
@@ -270,7 +282,7 @@
         }
         location.reload();
     }
-
 </script>
+<script src="../../static/contract.js"></script>
 </body>
 </html>
