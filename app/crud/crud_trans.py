@@ -50,12 +50,35 @@ def get_full_info_trans(db: Session, trans_id: str):
     return data
 
 
+def get_product_bu_trans_id(db: Session, trans_id: str):
+    trans = db.query(Trans).filter(Trans.transID == trans_id).first()
+    product = db.query(Product).filter(Product.proID == trans.productID).first()
+    return product
+
+
 def get_all_trans(db: Session, skip: int, limit: int):
     all_trans_db = (db.query(Trans)
                       .offset(skip)
                       .limit(limit)
                       .all())
     return all_trans_db
+
+
+# def get_all_trans_by_user_id(db: Session, user_id: str):
+#     trans = db.query(Trans).filter(Trans.userID == user_id).all()
+#     return trans
+
+
+def get_all_trans_ids_by_user_id(db: Session, user_id):
+    trans_ids = db.query(Trans.transID).filter(Trans.userID == user_id).all()
+    trans_ids_list = [trans_id[0] for trans_id in trans_ids]
+    full_info_trans_list = []
+
+    for trans_id in trans_ids_list:
+        full_info_trans = get_full_info_trans(db, trans_id)
+        full_info_trans_list.append(full_info_trans)
+
+    return full_info_trans_list
 
 
 def delete_trans(db: Session, trans_id: str):

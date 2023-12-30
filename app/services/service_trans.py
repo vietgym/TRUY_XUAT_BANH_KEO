@@ -41,6 +41,12 @@ class TransService:
             return {"mess": "LỖI KHÔNG GET ALL ĐƯỢC TRANS"}
         return trans_response
 
+    async def get_all_trans_ids_by_user_id(self, user_id: str):
+        trans_response = crud_trans.get_all_trans_ids_by_user_id(db=self.db, user_id=user_id)
+        if not trans_response:
+            return {"mess": "LỖI KHÔNG GET ALL ĐƯỢC TRANS BY ID USER"}
+        return trans_response
+
     async def delete_trans(self, trans_id: str):
         trans_response = crud_trans.delete_trans(db=self.db, trans_id=trans_id)
         if not trans_response:

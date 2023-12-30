@@ -29,6 +29,12 @@ class ProductService:
             return {"mess": "LỖI KHÔNG LẤY ĐƯỢC PRODUCT"}
         return product_response
 
+    async def get_product_by_id_trans(self, trans_id: str):
+        product_response = crud_product.get_product_by_id_trans(db=self.db, trans_id=trans_id)
+        if not product_response:
+            return {"mess": "LỖI KHÔNG LẤY ĐƯỢC PRODUCT"}
+        return product_response
+
     async def get_all_product(self, skip: int, limit: int):
         product_response = crud_product.get_all_product(db=self.db,
                                                         skip=skip,

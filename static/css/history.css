@@ -1,0 +1,98 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #f8f8f8;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.logo img {
+    max-height: 50px;
+    max-width: 100%;
+}
+
+.avatar-container {
+  margin-top: 20px; /* Khoảng cách giữa thanh menu và avatar */
+}
+
+.avatar-container img {
+  max-width: 200px; /* Điều chỉnh kích thước avatar theo mong muốn */
+  border-radius: 50%; /* Làm tròn góc để tạo hiệu ứng hình tròn */
+}
+
+nav {
+    display: flex;
+}
+
+.menu {
+    display: flex; /* Hiển thị các liên kết ngang */
+    margin-right: auto; /* Đẩy các phần tử sang bên trái */
+}
+
+.menu a {
+    text-decoration: none;
+    color: #333;
+    margin-right: 20px;
+    padding: 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.menu a:hover {
+    background-color: #ddd;
+    color: #333;
+    transform: scale(1.1);
+    transition: transform 0.3s ease;
+}
+
+.user-actions button {
+    background-color: #fd9644;
+    color: #fff;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.user-actions button:hover {
+    background-color: #ff7c1f;
+}
+
+.main-content {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Tiêu đề "Sản phẩm bánh kẹo" */
+h2 {
+    font-size: 24px;
+    color: #333;
+}
+/* Thêm vào phần style của file CSS */
+.transaction-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.transaction-table th, .transaction-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+.transaction-table th {
+    background-color: #f2f2f2;
+}
+
+.transaction-table tr:hover {
+    background-color: #f5f5f5;
+}

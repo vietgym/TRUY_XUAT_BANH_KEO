@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../static/css/product.css">
+    <title>Product Information</title>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="../../static/img/logo.png" alt="Logo">
+        </div>
+        <nav>
+            <div class="menu">
+                <a href="#">Quản lý sản phẩm bánh kẹo</a>
+                <a href="#">Thông tin tài khoản</a>
+            </div>
+        </nav>
+        <div class="user-actions">
+            <button onclick="logout()">Đăng xuất</button>
+        </div>
+    </header>
+
+    <div class="product-info">
+        <h2>Thông Tin Sản Phẩm</h2>
+        <form id="productInfoForm">
+            <table>
+                <tr>
+                    <th>Tên Sản Phẩm:</th>
+                    <td><input type="text" id="proName" size="40" readonly></td>
+                </tr>
+                <tr>
+                    <th>ID Sản Phẩm:</th>
+                    <td><input type="text" id="proID" size="40" readonly></td>
+                </tr>
+                <tr>
+                    <th>Nhà Sản Xuất:</th>
+                    <td><input type="text" id="manufacturerName" size="40" readonly></td>
+                </tr>
+                <tr>
+                    <th>Địa Chỉ Nhà Sản Xuất:</th>
+                    <td><input type="text" id="manufacturerAdd" size="40" readonly></td>
+                </tr>
+                <tr>
+                    <th>Liên Hệ Nhà Sản Xuất:</th>
+                    <td><input type="text" id="manufacturerCont" size="40" readonly></td>
+                </tr>
+                <tr>
+                    <th>Nhà Phân Phối:</th>
+                    <td><input type="text" id="distributorName" size="40" readonly></td>
+                </tr>
+                <tr>
+                    <th>Địa Chỉ Nhà Phân Phối:</th>
+                    <td><input type="text" id="distributorAdd" size="40" readonly></td>
+                </tr>
+                <tr>
+                    <th>Liên Hệ Nhà Phân Phối:</th>
+                    <td><input type="text" id="distributorCont" size="40" readonly></td>
+                </tr>
+                <tr>
+                    <th>Chi Tiết Khác:</th>
+                    <td><textarea id="otherDetails" rows="4" cols="37" readonly></textarea></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+
+    <script>
+        // Dữ liệu mẫu
+        var productData = {
+            "manufacturerAdd": "Công ty cổ phần bánh kẹo Bibica",
+            "manufacturerCont": "Công ty cổ phần bánh kẹo Bibica",
+            "distributorName": "Bách hoá xanh",
+            "otherDetails": "Bột mì (35%), đường tinh 26%, bột whey 5%, bột ca cao 4%, dầu đậu nành 1%, bơ hạt Hazelnut 0.3%, chất tạo xốp...",
+            "proName": "Bánh xốp Imperial",
+            "proID": "6e3cde71-3273-4640-a775-2045b4afe295",
+            "manufacturerName": "Công ty cổ phần bánh kẹo Bibica",
+            "distributorAdd": "Bách hoá xanh",
+            "distributorCont": "Bách hoá xanh"
+        };
+
+        // Hiển thị dữ liệu sản phẩm
+        document.getElementById("proName").value = productData.proName;
+        document.getElementById("proID").value = productData.proID;
+        document.getElementById("manufacturerName").value = productData.manufacturerName;
+        document.getElementById("manufacturerAdd").value = productData.manufacturerAdd;
+        document.getElementById("manufacturerCont").value = productData.manufacturerCont;
+        document.getElementById("distributorName").value = productData.distributorName;
+        document.getElementById("distributorAdd").value = productData.distributorAdd;
+        document.getElementById("distributorCont").value = productData.distributorCont;
+        document.getElementById("otherDetails").value = productData.otherDetails;
+
+        function logout() {
+            window.location.href = "/";
+        }
+    </script>
+</body>
+</html>

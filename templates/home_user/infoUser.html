@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../static/css/user.css">
+    <title>Trang Chủ</title>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="../../static/img/logo.png" alt="Logo">
+        </div>
+        <nav>
+            <div class="menu">
+                <a href="#">Quản lý sản phẩm bánh kẹo</a>
+                <a href="#">Thông tin tài khoản</a>
+            </div>
+        </nav>
+        <div class="user-actions">
+            <button onclick="logout()">Đăng xuất</button>
+        </div>
+    </header>
+
+    <div class="avatar-container">
+        <img src="../../static/img/avatar.png" alt="Avatar">
+    </div>
+
+    <div class="user-info">
+        <form id="userInfoForm">
+            <table>
+                <tr>
+                    <th>Name:</th>
+                    <td><input type="text" id="userName" size=40 readonly></td>
+                </tr>
+                <tr>
+                    <th>Email:</th>
+                    <td><input type="text" id="userEmail" size=40 readonly></td>
+                </tr>
+                <tr>
+                    <th>ID:</th>
+                    <td><input type="text" id="userID" size=40 readonly></td>
+                </tr>
+                <tr>
+                    <th>Role:</th>
+                    <td><input type="text" id="userRole" size=40 readonly></td>
+                </tr>
+            </table>
+        </form>
+        <div>
+            <button type="button" onclick="editUserInfo()">Sửa Thông Tin</button>
+        </div>
+    </div>
+
+    <!-- Thêm modal container -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeEditModal()">&times;</span>
+            <!-- Form sửa thông tin tương tự như form user-info -->
+            <form id="editUserInfoForm">
+                <h2>Edit User Information</h2>
+                <label for="editUserName">Name:</label>
+                <input type="text" id="editUserName" name="editUserName" size="45" required>
+
+                <label for="editUserEmail">Email:</label>
+                <input type="text" id="editUserEmail" name="editUserEmail" size="45" required>
+
+                <div class="center">
+                    <button type="button" onclick="confirmEdit()">Confirm</button>
+                    <button type="button" onclick="cancelEdit()" class="cancel">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <script>
+        function logout() {
+            window.location.href = "/";
+        }
+        document.addEventListener('DOMContentLoaded', function () {
+            fetch('/user_profile/')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('userName').value = data.userName;
+                    document.getElementById('userEmail').value = data.userEmail;
+                    document.getElementById('userID').value = data.userID;
+                    document.getElementById('userRole').value = data.role;
+                })
+                .catch(error => console.error('Error:', error));
+        });
+        function editUserInfo() {
+            document.getElementById('editModal').style.display = 'block';
+
+            document.getElementById('editUserName').value = document.getElementById('userName').value;
+            document.getElementById('editUserEmail').value = document.getElementById('userEmail').value;
+        }
+
+        async function confirmEdit() {
+            try {
+                const form = document.getElementById("editUserInfoForm");
+                const formData = new FormData(form);
+                const response = await fetch("/update_info_user/", {
+                    method: "POST",
+                    body: formData
+                });
+                if (!response.ok) {
+                    console.error("Lỗi cập nhật thông tin người dùng:", response.statusText);
+                }
+            } catch (error) {
+                console.error("Lỗi cập nhật thông tin người dùng:", error);
+            }
+            alert("Cập nhật thông tin thành công!")
+            document.getElementById('userName').value = document.getElementById('editUserName').value;
+            document.getElementById('userEmail').value = document.getElementById('editUserEmail').value;
+            closeEditModal();
+        }
+
+        function cancelEdit() {
+            document.getElementById('editUserName').value = document.getElementById('userName').value;
+            document.getElementById('editUserEmail').value = document.getElementById('userEmail').value;
+
+            document.getElementById('userName').readOnly = true;
+            document.getElementById('userEmail').readOnly = true;
+            document.getElementById('userID').readOnly = true;
+            document.getElementById('userRole').readOnly = true;
+            closeEditModal();
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

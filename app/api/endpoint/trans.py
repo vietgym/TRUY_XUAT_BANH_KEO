@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from app.schemas.schemas import Trans, TransBase
 from app.db.database import get_db
 from app.services.service_trans import TransService
+from app.api.current.current import get_session
 
 router = APIRouter()
 
@@ -13,6 +14,20 @@ router = APIRouter()
 @router.post("/creat_trans/")
 async def creat_user(user_id: str, product_id: str,
                      db: Session = Depends(get_db)):
+    trans_service = TransService(db=db)
+    trans_response = await trans_service.creat_trans(user_id=user_id,
+                                                     product_id=product_id)
+    return trans_response
+
+
+@router.post("/creat_trans_FE/")
+async def creat_trans_fe(request: Request,
+                         db: Session = Depends(get_db),
+                         session: Session = Depends(get_session)):
+    data = await request.json()
+    product_id = data.get("product_id")
+    user_id = session.get("current_user_id")
+    print(f"Nhận được user_id: {user_id}, product_id: {product_id}")
     trans_service = TransService(db=db)
     trans_response = await trans_service.creat_trans(user_id=user_id,
                                                      product_id=product_id)
@@ -41,6 +56,15 @@ async def get_all_trans(skip: int,
                         db: Session = Depends(get_db)):
     trans_service = TransService(db=db)
     trans_response = await trans_service.get_all_trans(skip=skip, limit=limit)
+    return trans_response
+
+
+@router.get("/get_all_trans_by_user_id/")
+async def read_trans_by_user_id(session: Session = Depends(get_session),
+                                db: Session = Depends(get_db)):
+    user_id = session.get("current_user_id")
+    trans_service = TransService(db=db)
+    trans_response = await trans_service.get_all_trans_ids_by_user_id(user_id=user_id)
     return trans_response
 
 

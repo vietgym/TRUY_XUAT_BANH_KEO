@@ -33,6 +33,11 @@ class UserLogin(BaseModel):
     userPass: str
 
 
+class UserUpdate(BaseModel):
+    userName: str
+    userEmail: str
+
+
 class User(UserBase):
     userID: str
 

@@ -23,10 +23,22 @@ class UserService:
             return {"mess": "LỖI KHÔNG UPDATE ĐƯỢC USER"}
         return upd_user
 
+    async def update_info_user(self, user_id: str, user_name: str, user_email: str):
+        user = crud_user.update_info_user(db=self.db, user_id=user_id, user_name=user_name, user_email=user_email)
+        if not user:
+            return {"mess": "LỖI KHÔNG UPDATE ĐƯỢC USER"}
+        return user
+
     async def get_user(self, user_id: str):
         user_response = crud_user.get_user(db=self.db, user_id=user_id)
         if not user_response:
             return {"mess": "LỖI KHÔNG LẤY ĐƯỢC USER"}
+        return user_response
+
+    async def get_role_user(self, user_id: str):
+        user_response = crud_user.get_role_user(db=self.db, user_id=user_id)
+        if not user_response:
+            return {"mess": "LỖI KHÔNG LẤY ĐƯỢC ROLE USER"}
         return user_response
 
     async def get_full_trans_user(self, user_id: str):

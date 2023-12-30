@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 from app.schemas.schemas import User, UserBase
 from app.db.database import get_db
 from app.services.service_user import UserService
+from app.api.current.current import get_session
 
 router = APIRouter()
 
@@ -19,7 +20,7 @@ async def creat_user(user: UserBase,
     return user_service
 
 
-@router.put("/update_user_by_id/{user_id}/")
+@router.post("/update_user_by_id/{user_id}/")
 async def update_user_by_id(user_id: str,
                             user_update: UserBase,
                             db: Session = Depends(get_db)):
@@ -28,12 +29,32 @@ async def update_user_by_id(user_id: str,
     return user_response
 
 
+@router.post("/update_user_test_2/")
+async def update_user_test_2(name: str, email: str,
+                             session: Session = Depends(get_session),
+                             db: Session = Depends(get_db)):
+    user_id = session.get("current_user_id")
+    user_service = UserService(db=db)
+    user_response = await user_service.update_info_user(user_id=user_id, user_name=name, user_email=email)
+    return user_response
+
+
 @router.get("/get_user_by_id/{user_id}/")
 async def get_user_by_id(user_id: str,
                          db: Session = Depends(get_db)):
-    pro_service = UserService(db=db)
-    pro_response = await pro_service.get_user(user_id=user_id)
-    return pro_response
+    user_service = UserService(db=db)
+    user_response = await user_service.get_user(user_id=user_id)
+    return user_response
+
+
+@router.get("/get_role_user/")
+async def get_role_user(request: Request,
+                        session: Session = Depends(get_session),
+                        db: Session = Depends(get_db)):
+    user_id = session.get("current_user_id")
+    user_service = UserService(db=db)
+    user_response = await user_service.get_role_user(user_id=user_id)
+    return user_response
 
 
 # @router.get("/get_full_trans_user/{user_id}/")

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../static/css/history.css">
+    <style>
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff; /* Màu nền của popup */
+            border: 1px solid #ccc; /* Viền của popup */
+            padding: 20px;
+            max-width: 400px; /* Độ rộng tối đa của popup */
+            z-index: 1000; /* Lớp z để đảm bảo popup đè lên popup khác */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Đổ bóng cho popup */
+        }
+
+        .popup-content {
+          text-align: center;
+        }
+
+        button {
+          background-color: #3498db;
+          color: #fedddd;
+          padding: 10px 20px;
+          margin: 5px;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+          transition: background-color 0.3s, transform 0.2s;
+        }
+
+        button:hover {
+          background-color: #2980b9;
+          transform: scale(1.05);
+        }
+        .popup_content {
+            text-align: center;
+        }
+
+        .popup button:hover {
+            background-color: #2980b9;
+            transform: scale(1.05);
+        }
+
+        .popup_content {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+    </style>
+<body>
+
+<header>
+    <div class="logo">
+        <img src="../../static/img/logo.png" alt="Logo">
+    </div>
+    <nav>
+        <div class="menu">
+            <a href="#" onclick="manageProducts(); return false;">Quay lại trang chủ</a>
+            <a href="#" onclick="accountInfo(); return false;">Thông tin tài khoản</a>
+        </div>
+    </nav>
+    <div class="user-actions">
+        <button onclick="logout()">Đăng xuất</button>
+    </div>
+
+    <div id="popup" class="popup">
+        <div class="popup-content" id="popup-content">
+        </div>
+    </div>
+    <div id="popup_info" class="popup">
+        <div class="popup_content" id="info-popup-content">
+        </div>
+    </div>
+    <script>
+        function closePopup() {
+          document.getElementById("popup").style.display = "none";
+        }
+    </script>
+</header>
+
+<!-- Trong phần body của trang -->
+<div class="main-content">
+    <h2>Lịch sử giao dịch</h2>
+    <table class="transaction-table" id="transactionTable">
+        <thead>
+            <tr>
+                <th>Tên KH</th>
+                <th>Tên SP</th>
+                <th>Tên NSX</th>
+                <th>Tên Đại lý</th>
+                <th>Thời gian GD</th>
+                <th>HASH</th>
+                <th>Chi tiết GD</th>
+            </tr>
+        </thead>
+        <tbody id="transactionTableBody">
+        </tbody>
+    </table>
+</div>
+<script>
+    async function fetchTransactionData() {
+        try {
+            const response = await fetch('/get_all_trans_by_user_id/');
+            const transactions = await response.json();
+            return transactions;
+        } catch (error) {
+            console.error('Error fetching transaction data:', error);
+            return [];
+        }
+    }
+
+    async function populateTransactionTable() {
+        const transactions = await fetchTransactionData();
+        const tableBody = document.getElementById("transactionTableBody");
+
+        transactions.forEach(transaction => {
+            const row = tableBody.insertRow();
+            row.insertCell(0).textContent = transaction.user.userName;
+            row.insertCell(1).textContent = transaction.product.proName;
+            row.insertCell(2).textContent = transaction.product.manufacturerName;
+            row.insertCell(3).textContent = transaction.product.distributorName;
+            row.insertCell(4).textContent = transaction.trans.transTime;
+            row.insertCell(5).textContent = transaction.trans.transHash;
+            row.insertCell(6).innerHTML = `<a href="#" onclick="viewDetails('${transaction.user.userID}', '${transaction.product.proID}', '${transaction.trans.transID}')">Xem chi tiết</a>`;
+        });
+    }
+    window.onload = populateTransactionTable;
+
+    // ... (your existing code)
+
+    async function viewDetails(user_id, product_id, trans_id) {
+        const transactions = await fetchTransactionData();
+        const transaction = transactions.find(t => t.trans.transID === trans_id);
+
+        if (transaction) {
+            const confirmHTML = `
+                <h3>Chi tiết giao dịch</h3>
+                <button onclick="showUserDetailsPopup('${transaction.user.userID}', '${transaction.user.role}', '${transaction.user.userName}', '${transaction.user.userEmail}')">Xem thông tin người dùng</button>
+                <button onclick="showProductDetailsPopup('${transaction.product.proID}', '${transaction.product.proName}', '${transaction.product.manufacturerName}', '${transaction.product.distributorName}', '${transaction.product.otherDetails}')">Xem thông tin sản phẩm</button>
+                <button onclick="showTransDetailsPopup('${transaction.trans.transTime}', '${transaction.trans.transID}', '${transaction.trans.transHash}', '${transaction.trans.userID}', '${transaction.trans.productID}')">Xem thông tin giao dịch</button>
+                <button onclick="closePopup()">Đóng</button>
+            `;
+            const popupContent = document.getElementById("popup-content");
+            popupContent.innerHTML = confirmHTML;
+            document.getElementById("popup").style.display = "block";
+        }
+    }
+
+    function showUserDetailsPopup(userID, role, userName, userEmail) {
+        const userPopupHTML = `
+            <h3>Thông tin người dùng</h3>
+            <p><strong>ID:</strong> ${userID}</p>
+            <p><strong>Vai trò:</strong> ${role}</p>
+            <p><strong>Tên người dùng:</strong> ${userName}</p>
+            <p><strong>Email:</strong> ${userEmail}</p>
+            <button onclick="closePopup1()">Đóng</button>
+        `;
+        const userPopupContent = document.getElementById("info-popup-content");
+        userPopupContent.innerHTML = userPopupHTML;
+        document.getElementById("popup_info").style.display = "block";
+    }
+    function showProductDetailsPopup(proID, proName, manufacturerName, distributorName, otherDetails) {
+        const productPopupHTML = `
+            <h3>Thông tin sản phẩm</h3>
+            <p><strong>ID sản phẩm:</strong> ${proID}</p>
+            <p><strong>Tên sản phẩm:</strong> ${proName}</p>
+            <p><strong>Nhà sản xuất:</strong> ${manufacturerName}</p>
+            <p><strong>Nhà phân phối:</strong> ${distributorName}</p>
+            <p><strong>Thông tin khác:</strong> ${otherDetails}</p>
+            <button onclick="closePopup1()">Đóng</button>
+        `;
+        const productPopupContent = document.getElementById("info-popup-content");
+        productPopupContent.innerHTML = productPopupHTML;
+        document.getElementById("popup_info").style.display = "block";
+    }
+    function showTransDetailsPopup(transTime, transID, transHash, userID, productID) {
+        const transPopupHTML = `
+            <h3>Thông tin giao dịch</h3>
+            <p><strong>Thời gian giao dịch:</strong> ${transTime}</p>
+            <p><strong>ID giao dịch:</strong> ${transID}</p>
+            <p><strong>Mã hash giao dịch:</strong> ${transHash}</p>
+            <p><strong>ID người dùng:</strong> ${userID}</p>
+            <p><strong>ID sản phẩm:</strong> ${productID}</p>
+            <button onclick="closePopup1()">Đóng</button>
+        `;
+        const transPopupContent = document.getElementById("info-popup-content");
+        transPopupContent.innerHTML = transPopupHTML;
+        document.getElementById("popup_info").style.display = "block";
+    }
+    function closePopup1() {
+        document.getElementById("popup_info").style.display = "none";
+    }
+</script>
+</body>
+</html>

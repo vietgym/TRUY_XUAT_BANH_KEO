@@ -30,9 +30,29 @@ def update_user(db: Session, user_id: str, user_update: schemas.UserBase):
     return db_user_check
 
 
+def update_info_user(db: Session, user_id: str, user_name: str, user_email: str):
+    db_user = get_user(db=db, user_id=user_id)
+    if db_user is None:
+        return {"mess": "LỖI KHÔNG TẠO ĐƯỢC PRODUCT MỚI"}
+    user_update = schemas.UserUpdate(userName=user_name, userEmail=user_email)
+
+    for field, value in user_update.dict().items():
+        setattr(db_user, field, value)
+
+    db.commit()
+    db.refresh(db_user)
+    return db_user
+
+
 def get_user(db: Session, user_id: str):
     user_respond = db.query(User).filter(User.userID == user_id).first()
     return user_respond
+
+
+def get_role_user(db: Session, user_id: str):
+    user_respond = db.query(User).filter(User.userID == user_id).first()
+    role_user = user_respond.role
+    return role_user
 
 
 def get_full_trans_user(db: Session, user_id: str):
