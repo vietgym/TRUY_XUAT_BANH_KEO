@@ -61,7 +61,7 @@
     </div>
     <nav>
         <div class="menu">
-            <a href="#" onclick="manageProducts(); return false;">Quay lại trang chủ</a>
+            <a href="#" onclick="backHome(); return false;">Quay lại trang chủ</a>
             <a href="#" onclick="accountInfo(); return false;">Thông tin tài khoản</a>
         </div>
     </nav>
@@ -195,6 +195,12 @@
     }
     function closePopup1() {
         document.getElementById("popup_info").style.display = "none";
+    }
+    function logout() {
+        window.location.href = "/";
+    }
+    function backHome() {
+        window.location.href = "/home_user/";
     }
 </script>
 </body>

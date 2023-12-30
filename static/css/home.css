@@ -77,10 +77,3 @@ h2 {
     font-size: 24px;
     color: #333;
 }
-
-/* Khu vực chứa sản phẩm */
-.product-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-}
