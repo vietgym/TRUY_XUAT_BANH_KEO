@@ -5,6 +5,95 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../../static/css/home.css">
+    <style>
+        /* Thêm CSS cho ô sản phẩm */
+        .product {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin: 10px;
+            text-align: center;
+            max-width: 300px;
+        }
+
+        .product img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .product h3 {
+            margin-top: 10px;
+        }
+
+        .product p {
+            font-size: 14px;
+            color: #555;
+        }
+
+        .product button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .product button:hover {
+            background-color: #45a049;
+        }
+        /* CSS cho cửa sổ popup */
+        #popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            z-index: 999;
+            width: 600px; /* Độ rộng của popup */
+        }
+
+        .popup-content {
+            text-align: center; /* Để canh giữa nội dung */
+        }
+
+        .popup-content img {
+            max-width: 100%; /* Đảm bảo hình ảnh không vượt quá kích thước của popup */
+        }
+
+        .popup-content label {
+            display: inline-block; /* Hiển thị label và input trên cùng một dòng */
+            width: 30%; /* Đặt chiều rộng của label */
+            text-align: right; /* Canh lề phải của label */
+            margin-right: 10px; /* Khoảng cách giữa label và input */
+        }
+
+        .popup-content input,
+        .popup-content textarea {
+            width: 60%; /* Đặt chiều rộng của input và textarea */
+            padding: 4px;
+            margin-top: 2px;
+            margin-bottom: 5px;
+            box-sizing: border-box;
+        }
+
+        .popup-content button {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .popup-content button:hover {
+            background-color: #45a049;
+        }
+    </style>
     <title>Trang Chủ</title>
 </head>
 <body>
@@ -15,32 +104,153 @@
     </div>
     <nav>
         <div class="menu">
-            <a href="" onclick="manageProducts(); return false;">Mua bánh kẹo</a>
-            <a href="" onclick="accountInfo(); return false;">Thông tin tài khoản</a>
+            <a href="#" onclick="manageProducts(); return false;">Mua bánh kẹo</a>
+            <a href="#" onclick="accountInfo(); return false;">Thông tin tài khoản</a>
         </div>
     </nav>
     <div class="user-actions">
         <button onclick="logout()">Đăng xuất</button>
     </div>
+
+    <div id="popup" class="popup">
+        <div class="popup-content" id="popup-content">
+        </div>
+    </div>
+
+    <script>
+        function closePopup() {
+          document.getElementById("popup").style.display = "none";
+        }
+    </script>
 </header>
 
-<div class="avatar-container">
-    <img src="../../static/img/avatar.png" alt="Avatar">
+<div class="main-content">
+    <h2>Sản phẩm bánh kẹo</h2>
+    <div class="product-container" id="productContainer">
+    </div>
 </div>
-
-<!-- Nội dung trang chủ ở đây -->
-
 <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        fetch("/get_all_products/")
+            .then(response => response.json())
+            .then(data => {
+                displayProducts(data);
+            })
+            .catch(error => console.error("Error fetching products:", error));
+    });
+
+    function displayProducts(products) {
+        const productContainer = document.getElementById("productContainer");
+        products.forEach(product => {
+            const productDiv = document.createElement("div");
+            productDiv.classList.add("product");
+
+            productDiv.innerHTML = `
+                <img src="../../static/img/sp1.png" alt="${product.proName}" onclick="viewProductDetails('${product.proID}', '${product.proName}', '${product.manufacturerName}', '${product.manufacturerAdd}', '${product.manufacturerCont}', '${product.distributorName}', '${product.distributorAdd}', '${product.distributorCont}', '${product.otherDetails}')">
+                <h3>${product.proName}</h3>
+                <p>${product.otherDetails}</p>
+                <button onclick="buyProduct('${product.proID}', '${product.proName}')">Mua ngay</button>
+                <button onclick="addProduct('${product.proID}')">Thêm vào giỏ</button>
+            `;
+
+            productContainer.appendChild(productDiv);
+        });
+    }
+    function viewProductDetails(productId, productName, manufacturerName, manufacturerAdd, manufacturerCont, distributorName, distributorAdd, distributorCont, otherDetails) {
+        const productInfoHTML = `
+            <img src="../../static/img/sp1.png" alt="${productId}">
+            <h3>${productName}</h3>
+            <label for="manufacturerName">Manufacturer Name:</label>
+            <input type="text" id="manufacturerName" name="manufacturerName" value="${manufacturerName}" readonly>
+            <label for="manufacturerAdd">Manufacturer Address:</label>
+            <input type="text" id="manufacturerAdd" name="manufacturerAdd" value="${manufacturerAdd}" readonly>
+            <label for="manufacturerCont">Manufacturer Contact:</label>
+            <input type="text" id="manufacturerCont" name="manufacturerCont" value="${manufacturerCont}" readonly>
+            <label for="distributorName">Distributor Name:</label>
+            <input type="text" id="distributorName" name="distributorName" value="${distributorName}" readonly>
+            <label for="distributorAdd">Distributor Address:</label>
+            <input type="text" id="distributorAdd" name="distributorAdd" value="${distributorAdd}" readonly>
+            <label for="distributorCont">Distributor Contact:</label>
+            <input type="text" id="distributorCont" name="distributorCont" value="${distributorCont}" readonly>
+            <label for="otherDetails">Other Details:</label>
+            <textarea id="otherDetails" name="otherDetails" readonly>${otherDetails}</textarea>
+            <button class="close" onclick="closedProduct('${productId}')">Đóng</button>
+        `;
+
+        const popupContent = document.getElementById("popup-content");
+        popupContent.innerHTML = productInfoHTML;
+        document.getElementById("popup").style.display = "block";
+    }
+
     function logout() {
         window.location.href = "/";
     }
+
     function manageProducts() {
-        window.location.href = "/load_register/";
+
     }
+
     function accountInfo() {
         window.location.href = "/load_user_profile/";
     }
-</script>
 
+    async function buyProduct(productID, productName){
+        const confirmHTML = `
+        <div id="buyConfirmation">
+            <h3>Xác nhận mua hàng</h3>
+            <p>Bạn có chắc muốn mua sản phẩm "${productName}" không?</p>
+            <button onclick="confirmPurchase('${productID}')">Mua ngay</button>
+            <button onclick="closedProduct()">Đóng</button>
+        </div>
+        `;
+
+        const popupContent = document.getElementById("popup-content");
+        popupContent.innerHTML = confirmHTML;
+        document.getElementById("popup").style.display = "block";
+    }
+    async function confirmPurchase(productID){
+        alert("Thông tin GIAO DỊCH đã được lưu")
+        alert(productID)
+        const data = { product_id: productID };
+            fetch("/creat_trans_FE/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+            })
+        .then(response => response.json())
+        .then(result => {
+            console.log("Edit product response:", result);
+        })
+        .catch(error => console.error("Error editing product:", error));
+    }
+
+    async function addProduct(productID){
+        alert(productID)
+    }
+
+    function closedProduct() {
+        document.getElementById('popup').style.display = 'none';
+    }
+
+    async function confirmDeleteProduct(){
+        try {
+            const form = document.getElementById("editForm");
+            const formData = new FormData(form);
+            const response = await fetch("/delete_info_product/", {
+                method: "DELETE",
+                body: formData
+            });
+            if (!response.ok) {
+                console.error("Lỗi cập nhật thông tin người dùng:", response.statusText);
+            }
+        } catch (error) {
+            console.error("Lỗi cập nhật thông tin người dùng:", error);
+        }
+        location.reload();
+    }
+
+</script>
 </body>
 </html>

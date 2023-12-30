@@ -310,9 +310,7 @@
         } catch (error) {
             console.error("Lỗi cập nhật thông tin người dùng:", error);
         }
-        alert("Cập nhật thông tin thành công!")
-        // document.getElementById('userName').value = document.getElementById('editUserName').value;
-        // document.getElementById('userEmail').value = document.getElementById('editUserEmail').value;
+        alert("Cập nhật thông tin thành công!");
         location.reload();
     }
     function closedProduct() {
@@ -342,7 +340,7 @@
                 <input type="text" id="distributorCont" name="distributorCont" value="${distributorCont}" readonly>
                 <label for="otherDetails">Other Details:</label>
                 <textarea id="otherDetails" name="otherDetails" readonly>${otherDetails}</textarea>
-                <button type="button" class="xac_nhan" onclick="confirmDeleteProduct()">Xác Nhận</button>
+                <button type="button" class="xac_nhan" onclick="confirmDeleteProduct()">Xác Nhận Xoá</button>
                 <button type="button" class="close" onclick="closedProduct()">Đóng</button>
             </form>
         `;

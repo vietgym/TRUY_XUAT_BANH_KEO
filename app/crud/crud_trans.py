@@ -58,6 +58,11 @@ def get_all_trans(db: Session, skip: int, limit: int):
     return all_trans_db
 
 
+def get_all_trans_by_user_id(db: Session, user_id: str):
+    trans = db.query(Trans).filter(Trans.userID == user_id).all()
+    return trans
+
+
 def delete_trans(db: Session, trans_id: str):
     trans_dlt = db.query(Trans).filter(Trans.transID == trans_id).first()
     if trans_dlt:

@@ -49,8 +49,8 @@ async def update_product_by_id(pro_id: str,
 @router.post("/edit_product/")
 async def edit_product(request: Request):
     data = await request.json()
-    product_id = data.get("productId")
-    print("Received productId:", product_id)
+    product_id = data.get("product_id")
+    print(f"Nhận được Product: {product_id}")
     return {"message": "Product ID received successfully"}
 
 
@@ -80,6 +80,14 @@ async def get_product_by_id(pro_id: str,
                             db: Session = Depends(get_db)):
     pro_service = ProductService(db=db)
     pro_response = await pro_service.get_product(pro_id=pro_id)
+    return pro_response
+
+
+@router.get("/get_product_by_id_trans/")
+async def get_product_by_id_trans(trans_id: str,
+                                  db: Session = Depends(get_db)):
+    pro_service = ProductService(db=db)
+    pro_response = await pro_service.get_product_by_id_trans(trans_id=trans_id)
     return pro_response
 
 

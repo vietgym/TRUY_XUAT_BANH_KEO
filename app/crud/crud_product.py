@@ -1,6 +1,6 @@
 import uuid
 from sqlalchemy.orm import Session
-from app.model.all import Product
+from app.model.all import Product, Trans
 from app.schemas import schemas
 
 
@@ -34,6 +34,12 @@ def update_product(db: Session, pro_id: str, pro_update: schemas.ProductBase):
 def get_product(db: Session, pro_id: str):
     product_respond = db.query(Product).filter(Product.proID == pro_id).first()
     return product_respond
+
+
+def get_product_by_id_trans(db: Session, trans_id: str):
+    trans = db.query(Trans).filter(Trans.transID == trans_id).first()
+    product = db.query(Product).filter(Product.proID == trans.productID).first()
+    return product
 
 
 def get_all_product(db: Session, skip: int, limit: int):
